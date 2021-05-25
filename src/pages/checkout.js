@@ -1,15 +1,26 @@
 import Header from "../components/Header";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectItems, selectTotal } from "../slices/basketSlice";
 import CheckoutProduct from "../components/CheckoutProduct";
 import Currency from "react-currency-formatter";
 import { useSession } from "next-auth/client";
+import { groupBy } from "lodash";
+import { clearBasket } from "../slices/basketSlice";
+import { useRouter } from "next/router";
 
 function Checkout() {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
+  const dispatch = useDispatch();
   const [session] = useSession();
+  const router = useRouter();
+  const groupedItems = Object.values(groupBy(items, "id"));
+  const clearWholeBasket = () => {
+    dispatch(clearBasket());
+    router.push("/");
+  };
+
   return (
     <div className="bg-gray-100">
       <Header />
@@ -30,17 +41,18 @@ function Checkout() {
                 : "Your Shopping Basket"}
             </h1>
 
-            {items.map((item, i) => (
+            {groupedItems.map((group, i) => (
               <CheckoutProduct
                 key={i}
-                id={item.id}
-                title={item.title}
-                rating={item.rating}
-                price={item.price}
-                description={item.description}
-                category={item.category}
-                image={item.image}
-                hasPrime={item.hasPrime}
+                id={group[0].id}
+                title={group[0].title}
+                rating={group[0].rating}
+                price={group[0].price}
+                description={group[0].description}
+                category={group[0].category}
+                image={group[0].image}
+                hasPrime={group[0].hasPrime}
+                quantity={group.length}
               />
             ))}
           </div>
@@ -65,6 +77,9 @@ function Checkout() {
                 }`}
               >
                 {!session ? "Sign in To Checkout" : "Proceed to Checkout"}
+              </button>
+              <button className="button mt-2" onClick={clearWholeBasket}>
+                Clear the Basket
               </button>
             </>
           )}

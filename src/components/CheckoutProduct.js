@@ -1,7 +1,11 @@
 import { StarIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import Currency from "react-currency-formatter";
-import { addToBasket, removeFromBasket } from "../slices/basketSlice";
+import {
+  addToBasket,
+  removeFromBasket,
+  removeGroupedFromBasket,
+} from "../slices/basketSlice";
 import { useDispatch } from "react-redux";
 
 function CheckoutProduct({
@@ -13,6 +17,7 @@ function CheckoutProduct({
   category,
   image,
   hasPrime,
+  quantity,
 }) {
   const dispatch = useDispatch();
   const addItemToBasket = () => {
@@ -33,6 +38,12 @@ function CheckoutProduct({
   const removeItemFromBasket = () => {
     dispatch(removeFromBasket({ id }));
   };
+
+  const removeGroupFromBasket = () => {
+    dispatch(removeGroupedFromBasket({ id }));
+  };
+
+  const total = price * quantity;
   return (
     <div className="grid grid-cols-5">
       <Image src={image} height={200} width={200} objectFit="contain" />
@@ -46,9 +57,11 @@ function CheckoutProduct({
               <StarIcon key={i} className="h-5 text-yellow-500" />
             ))}
         </div>
-
         <p className="text-xs my-2 line-clamp-3">{description}</p>
-        <Currency quantity={price * 103.17} currency="INR" />
+        {quantity} x <Currency quantity={price * 103.17} currency="INR" />={" "}
+        <span className="font-bold">
+          <Currency quantity={total * 103.17} currency="INR" />
+        </span>
         {hasPrime && (
           <div className="flex items-center space-x-2">
             <img
@@ -62,11 +75,17 @@ function CheckoutProduct({
       </div>
 
       <div className="flex flex-col space-y-2 my-auto justify-self-center">
-        <button className="button mt-auto" onClick={addItemToBasket}>
-          Add to Basket
-        </button>
-        <button className="button mt-auto" onClick={removeItemFromBasket}>
-          Remove From
+        <div>
+          <button className="button mt-auto" onClick={removeItemFromBasket}>
+            -
+          </button>
+          <span>Quantity: {quantity}</span>
+          <button className="button mt-auto" onClick={addItemToBasket}>
+            +
+          </button>
+        </div>
+        <button className="button mt-auto" onClick={removeGroupFromBasket}>
+          Remove From Basket
         </button>
       </div>
     </div>

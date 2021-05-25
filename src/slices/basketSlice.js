@@ -11,7 +11,6 @@ export const basketSlice = createSlice({
     //Actions
     addToBasket: (state, action) => {
       state.items = [...state.items, action.payload];
-      let newBasket = state.items.sort((a, b) => (a.id > b.id ? 1 : -1));
     },
     removeFromBasket: (state, action) => {
       const index = state.items.findIndex(
@@ -29,10 +28,25 @@ export const basketSlice = createSlice({
 
       state.items = newBasket;
     },
+    removeGroupedFromBasket: (state, action) => {
+      let newBasket = state.items.filter(
+        (basketItem) => basketItem.id !== action.payload.id
+      );
+
+      state.items = newBasket;
+    },
+    clearBasket: (state, action) => {
+      state.items = [];
+    },
   },
 });
 
-export const { addToBasket, removeFromBasket } = basketSlice.actions;
+export const {
+  addToBasket,
+  removeFromBasket,
+  removeGroupedFromBasket,
+  clearBasket,
+} = basketSlice.actions;
 
 // Selectors - This is how we pull information from the Global store slice
 export const selectItems = (state) => state.basket.items;
