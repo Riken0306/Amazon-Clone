@@ -51,7 +51,7 @@ function Header(props) {
             <p className="font-extrabold md:text-sm">Accounts & Services</p>
           </div>
 
-          <div className="link">
+          <div className="link" onClick={() => router.push("/orders")}>
             <p>Returns</p>
             <p className="font-extrabold md:text-sm">& Orders</p>
           </div>
@@ -74,17 +74,6 @@ function Header(props) {
       <div className="flex items-center space-x-3 p-2 pl-6 bg-amazon_blue-light text-white text-sm">
         <p className="flex items-center">
           <MenuIcon className="h-6 mr-1" />
-          {/* <Menu className="link flex items-center disableCloseOnEsc ">
-            <a id="home" className="menu-item" href="/">
-              Home
-            </a>
-            <a id="about" className="menu-item" href="/about">
-              About
-            </a>
-            <a id="contact" className="menu-item" href="/contact">
-              Contact
-            </a>
-          </Menu> */}
           All
         </p>
         <p className="link">Prime Video</p>

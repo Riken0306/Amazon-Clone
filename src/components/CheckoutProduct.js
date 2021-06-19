@@ -60,7 +60,7 @@ function CheckoutProduct({
         <p className="text-xs my-2 line-clamp-3">{description}</p>
         {quantity} x <Currency quantity={price * 103.17} currency="INR" />={" "}
         <span className="font-bold">
-          <Currency quantity={total * 103.17} currency="INR" />
+          <Currency quantity={total * 103} currency="INR" />
         </span>
         {hasPrime && (
           <div className="flex items-center space-x-2">
